@@ -5,13 +5,22 @@ import (
 	"time"
 )
 
-func Test_NewJob(t *testing.T) {
+func Test_NewLimitedJob(t *testing.T) {
 	dur := time.Second * 4
-	job := NewJob(dur)
+	job := NewLimitedJob([]string{}, []string{}, dur)
 
 	if job.interval != defaultInterval {
 		t.Errorf("interval: want %v, got %v",
 			defaultInterval,
 			job.interval)
+	}
+}
+
+func Test_NewJob(t *testing.T) {
+	job := NewJob([]string{}, []string{})
+
+	if job.timeout != nil {
+		t.Errorf("duration: want nil, got %v",
+			job.timeout)
 	}
 }
