@@ -28,17 +28,3 @@ func main() {
 	wg.Wait()
 	fmt.Println("-- all done --")
 }
-func _main() {
-	/*
-		ctx, cancel := context.WithCancel(context.Background())
-		job := NewJob()
-
-		tick := time.NewTicker(24 * time.Second)
-		defer cancel()
-		go watch(ctx, job)
-		<-tick.C
-		cancel()
-
-		fmt.Println("all done", job)
-	*/
-}
