@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-var defaultInterval time.Duration = time.Second * 2
+var DefaultInterval time.Duration = time.Second * 2
 
 type Job struct {
 	path     string
@@ -21,7 +21,7 @@ func NewJob(pathExpr string, command *Command) *Job {
 	return &Job{
 		path:     pathExpr,
 		command:  command,
-		interval: defaultInterval,
+		interval: DefaultInterval,
 		timeout:  nil,
 		previous: &previous,
 	}

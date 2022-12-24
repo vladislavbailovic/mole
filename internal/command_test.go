@@ -11,7 +11,7 @@ func Test_CommandTarget_New(t *testing.T) {
 
 func Test_CommandTarget_Set(t *testing.T) {
 	suite := map[string]CommandTarget{
-		"any":     TargetAny,
+		"any":     TargetNone,
 		"all":     TargetAll,
 		"added":   TargetAdded,
 		"changed": TargetChanged,

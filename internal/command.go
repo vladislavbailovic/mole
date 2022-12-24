@@ -9,9 +9,9 @@ import (
 type CommandTarget int
 
 const (
-	TargetAny      CommandTarget = iota // Executes always TODO: do we really need this?
-	TargetAll                           // Executes if anything changes
-	TargetExisting                      // Executes if existing files
+	TargetNone CommandTarget = iota // No changed params
+	TargetAll                       // Any changes
+	TargetExisting
 	TargetAdded
 	TargetChanged
 	TargetRemoved
@@ -42,7 +42,7 @@ func (x *Command) ExecuteWith(cmp *Comparison) error {
 		switch x.target {
 		case TargetExisting:
 			tgts = cmp.Existing()
-		case TargetAll, TargetAny:
+		case TargetAll, TargetNone:
 			tgts = cmp.All()
 		case TargetAdded:
 			tgts = cmp.Added()
@@ -52,7 +52,7 @@ func (x *Command) ExecuteWith(cmp *Comparison) error {
 			tgts = cmp.Removed()
 		}
 		if len(tgts) == 0 {
-			if x.target != TargetAny {
+			if x.target != TargetNone {
 				fmt.Println("no targets, bailing out")
 				return nil
 			}
