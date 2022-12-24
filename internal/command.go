@@ -17,6 +17,22 @@ const (
 	TargetRemoved
 )
 
+func TargetFromString(s string) CommandTarget {
+	switch s {
+	case "all":
+		return TargetAll
+	case "existing":
+		return TargetExisting
+	case "add":
+		return TargetAdded
+	case "chg":
+		return TargetChanged
+	case "rmv":
+		return TargetRemoved
+	}
+	return TargetNone
+}
+
 type Command struct {
 	bin    string
 	args   []string
@@ -59,11 +75,14 @@ func (x *Command) ExecuteWith(cmp *Comparison) error {
 		}
 		args = make([]string, 0, len(x.args)+len(tgts))
 		args = append(args, x.args...)
-		args = append(args, tgts...)
+		if x.target != TargetNone {
+			args = append(args, tgts...)
+		}
 	} else {
 		args = x.args[:]
 	}
 
+	fmt.Println("Gonna run:", x.bin, args)
 	cmd := exec.Command(x.bin, args...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr

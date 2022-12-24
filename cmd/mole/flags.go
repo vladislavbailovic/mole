@@ -35,7 +35,7 @@ func ParseFlags(args []string) Config {
 		command  string
 		interval time.Duration
 		timeout  time.Duration
-		// target   string
+		target   string
 	)
 
 	cmd := flag.NewFlagSet("mole", flag.ExitOnError)
@@ -43,6 +43,7 @@ func ParseFlags(args []string) Config {
 	cmd.StringVar(&command, "command", "", "Run this command")
 	cmd.DurationVar(&interval, "interval", internal.DefaultInterval, "Every so often")
 	cmd.DurationVar(&timeout, "timeout", 0, "Until")
+	cmd.StringVar(&target, "target", "", "With these args")
 	cmd.Parse(args)
 
 	cfg := Config{
@@ -52,6 +53,10 @@ func ParseFlags(args []string) Config {
 	}
 	if timeout > 0 {
 		cfg.Timeout = &timeout
+	}
+	if target != "" {
+		tgt := internal.TargetFromString(target)
+		cfg.Target = &tgt
 	}
 
 	return cfg
