@@ -51,3 +51,38 @@ func (x Comparison) Any() bool {
 		len(x.chg) > 0 ||
 		len(x.rmv) > 0
 }
+
+func (x Comparison) Added() []string {
+	result := make([]string, 0, len(x.add))
+	for f := range x.add {
+		result = append(result, f)
+	}
+	return result
+}
+
+func (x Comparison) Changed() []string {
+	result := make([]string, 0, len(x.chg))
+	for f := range x.chg {
+		result = append(result, f)
+	}
+	return result
+}
+
+func (x Comparison) Removed() []string {
+	result := make([]string, 0, len(x.rmv))
+	for f := range x.rmv {
+		result = append(result, f)
+	}
+	return result
+}
+
+func (x Comparison) All() []string {
+	result := make([]string, 0,
+		len(x.add)+len(x.chg)+len(x.rmv))
+
+	result = append(result, x.Added()...)
+	result = append(result, x.Changed()...)
+	result = append(result, x.Removed()...)
+
+	return result
+}

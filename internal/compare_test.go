@@ -2,6 +2,56 @@ package internal
 
 import "testing"
 
+func Test_ComparisonAll(t *testing.T) {
+	suite := map[string]struct {
+		test Comparison
+		want []string
+	}{
+		"no changes": {
+			test: Comparison{},
+			want: []string{},
+		},
+		"add": {
+			test: Comparison{
+				add: Filelist{"f1": "h1"},
+			},
+			want: []string{"f1"},
+		},
+		"chg": {
+			test: Comparison{
+				chg: Filelist{"f1": "h1"},
+			},
+			want: []string{"f1"},
+		},
+		"rmv": {
+			test: Comparison{
+				rmv: Filelist{"f1": "h1"},
+			},
+			want: []string{"f1"},
+		},
+		"all": {
+			test: Comparison{
+				add: Filelist{"f1": "h1"},
+				chg: Filelist{"f2": "h2"},
+				rmv: Filelist{"f3": "h3"},
+			},
+			want: []string{"f1", "f2", "f3"},
+		},
+	}
+	for name, test := range suite {
+		t.Run(name, func(t *testing.T) {
+			got := test.test.All()
+			if len(test.want) != len(got) {
+				t.Log(test.want)
+				t.Log(got)
+				t.Fatalf(
+					"len: want %d, got %d",
+					len(test.want), len(got))
+			}
+		})
+	}
+}
+
 func Test_ComparisonAny(t *testing.T) {
 	suite := map[string]struct {
 		test Comparison
