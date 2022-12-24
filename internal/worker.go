@@ -2,7 +2,6 @@ package internal
 
 import (
 	"context"
-	"fmt"
 	"time"
 )
 
@@ -51,16 +50,15 @@ work:
 		x.execute()
 		select {
 		case <-tick.C:
-			fmt.Println("then work some more")
+			// fmt.Println("then work some more")
 			continue
 		case <-ctx.Done():
-			fmt.Println("context done")
-			// return
+			// fmt.Println("context done")
 			break work
 		}
 	}
 
-	fmt.Println("work cleanup code")
+	// fmt.Println("work cleanup code")
 }
 
 func (x *Job) execute() {
@@ -70,7 +68,7 @@ func (x *Job) execute() {
 	cmp := CompareFilelists(&lst, x.previous)
 	x.previous = &lst
 	if !cmp.Any() {
-		fmt.Println("no changes, carry on")
+		// fmt.Println("no changes, carry on")
 		return
 	}
 

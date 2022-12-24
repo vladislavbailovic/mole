@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"fmt"
 	"os"
 	"os/exec"
 )
@@ -69,7 +68,7 @@ func (x *Command) ExecuteWith(cmp *Comparison) error {
 		}
 		if len(tgts) == 0 {
 			if x.target != TargetNone {
-				fmt.Println("no targets, bailing out")
+				// fmt.Println("no targets, bailing out")
 				return nil
 			}
 		}
@@ -82,7 +81,7 @@ func (x *Command) ExecuteWith(cmp *Comparison) error {
 		args = x.args[:]
 	}
 
-	fmt.Println("Gonna run:", x.bin, args)
+	// fmt.Println("Gonna run:", x.bin, args)
 	cmd := exec.Command(x.bin, args...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
