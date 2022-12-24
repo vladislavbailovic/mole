@@ -76,6 +76,16 @@ func (x Comparison) Removed() []string {
 	return result
 }
 
+func (x Comparison) Existing() []string {
+	result := make([]string, 0,
+		len(x.add)+len(x.chg))
+
+	result = append(result, x.Added()...)
+	result = append(result, x.Changed()...)
+
+	return result
+}
+
 func (x Comparison) All() []string {
 	result := make([]string, 0,
 		len(x.add)+len(x.chg)+len(x.rmv))

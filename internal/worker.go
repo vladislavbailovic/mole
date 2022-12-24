@@ -3,8 +3,6 @@ package internal
 import (
 	"context"
 	"fmt"
-	"os"
-	"os/exec"
 	"time"
 )
 
@@ -76,13 +74,8 @@ func (x *Job) execute() {
 		return
 	}
 
-	raw := make([]string, 0, len(x.command)+len(paths))
-	raw = append(raw, x.command...)
-	raw = append(raw, paths...)
-	cmd := exec.Command(raw[0], raw[1:]...)
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	if err := cmd.Run(); err != nil {
+	cmd := NewCommand(x.command[0], x.command[1:])
+	if err := cmd.ExecuteWith(&cmp); err != nil {
 		panic(err)
 	}
 }
