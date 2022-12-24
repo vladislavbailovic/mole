@@ -2,11 +2,51 @@ package internal
 
 import "testing"
 
+func Test_ComparisonAny(t *testing.T) {
+	suite := map[string]struct {
+		test Comparison
+		want bool
+	}{
+		"empty comparison": {
+			test: Comparison{},
+			want: false,
+		},
+		"add comparison": {
+			test: Comparison{
+				add: Filelist{"new": "file"},
+			},
+			want: true,
+		},
+		"chg comparison": {
+			test: Comparison{
+				chg: Filelist{"new": "file"},
+			},
+			want: true,
+		},
+		"rmv comparison": {
+			test: Comparison{
+				rmv: Filelist{"new": "file"},
+			},
+			want: true,
+		},
+	}
+	for name, test := range suite {
+		t.Run(name, func(t *testing.T) {
+			got := test.test.Any()
+			if test.want != got {
+				t.Errorf(
+					"want %v, got %v",
+					test.want, got)
+			}
+		})
+	}
+}
+
 func Test_CompareFilelists(t *testing.T) {
 	suite := map[string]struct {
 		old  Filelist
 		new  Filelist
-		want comparison
+		want Comparison
 	}{
 		"simple, no diff": {
 			old: Filelist{
@@ -15,7 +55,7 @@ func Test_CompareFilelists(t *testing.T) {
 			new: Filelist{
 				"file 1": "mock hash 1",
 			},
-			want: comparison{},
+			want: Comparison{},
 		},
 		"one new file": {
 			old: Filelist{
@@ -25,7 +65,7 @@ func Test_CompareFilelists(t *testing.T) {
 				"file 1": "mock hash 1",
 				"file 2": "mock hash 2",
 			},
-			want: comparison{
+			want: Comparison{
 				add: Filelist{
 					"file 2": "mock hash 2",
 				},
@@ -39,7 +79,7 @@ func Test_CompareFilelists(t *testing.T) {
 			new: Filelist{
 				"file 1": "mock hash 1",
 			},
-			want: comparison{
+			want: Comparison{
 				rmv: Filelist{
 					"file 2": "mock hash 2",
 				},
@@ -54,7 +94,7 @@ func Test_CompareFilelists(t *testing.T) {
 				"file 1": "mock hash 1",
 				"file 2": "mock hash 2a",
 			},
-			want: comparison{
+			want: Comparison{
 				chg: Filelist{
 					"file 2": "mock hash 2a",
 				},

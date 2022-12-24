@@ -5,17 +5,15 @@ import (
 	"fmt"
 	"mole/internal"
 	"sync"
-	"time"
 )
 
 func main() {
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	job := internal.NewLimitedJob(
+	job := internal.NewJob(
 		"testdata/**/*.txt",
 		[]string{"ls", "-la"},
-		4*time.Second,
 	)
 
 	var wg sync.WaitGroup

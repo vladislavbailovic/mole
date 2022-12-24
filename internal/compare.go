@@ -1,12 +1,12 @@
 package internal
 
-type comparison struct {
+type Comparison struct {
 	add Filelist
 	rmv Filelist
 	chg Filelist
 }
 
-func CompareFilelists(n *Filelist, o *Filelist) comparison {
+func CompareFilelists(n *Filelist, o *Filelist) Comparison {
 	var add, chg, rmv Filelist
 	if len(*n) > len(*o) {
 		add = make(Filelist, len(*n)-len(*o))
@@ -43,5 +43,11 @@ func CompareFilelists(n *Filelist, o *Filelist) comparison {
 		rmv[path] = hash
 	}
 
-	return comparison{add: add, chg: chg, rmv: rmv}
+	return Comparison{add: add, chg: chg, rmv: rmv}
+}
+
+func (x Comparison) Any() bool {
+	return len(x.add) > 0 ||
+		len(x.chg) > 0 ||
+		len(x.rmv) > 0
 }

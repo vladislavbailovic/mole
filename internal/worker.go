@@ -15,14 +15,17 @@ type Job struct {
 	command  []string
 	interval time.Duration
 	timeout  *time.Duration
+	previous *Filelist
 }
 
 func NewJob(pathExpr string, command []string) *Job {
+	previous := make(Filelist, 0)
 	return &Job{
 		path:     pathExpr,
 		command:  command,
 		interval: defaultInterval,
 		timeout:  nil,
+		previous: &previous,
 	}
 }
 
@@ -64,6 +67,15 @@ work:
 
 func (x *Job) execute() {
 	paths := ListFiles(x.path, DefaultGlobDepth)
+
+	lst := NewFilelist(paths)
+	cmp := CompareFilelists(&lst, x.previous)
+	x.previous = &lst
+	if !cmp.Any() {
+		fmt.Println("no changes, carry on")
+		return
+	}
+
 	raw := make([]string, 0, len(x.command)+len(paths))
 	raw = append(raw, x.command...)
 	raw = append(raw, paths...)
@@ -73,8 +85,4 @@ func (x *Job) execute() {
 	if err := cmd.Run(); err != nil {
 		panic(err)
 	}
-
-	// for _, path := range paths {
-	// 	fmt.Println("running", x.command, "on", path)
-	// }
 }
