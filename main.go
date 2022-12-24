@@ -13,7 +13,7 @@ func main() {
 
 	job := internal.NewJob(
 		"testdata/**/*.txt",
-		[]string{"ls", "-la"},
+		internal.NewCommand("ls", []string{"-la"}),
 	)
 
 	var wg sync.WaitGroup

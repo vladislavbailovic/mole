@@ -10,13 +10,13 @@ var defaultInterval time.Duration = time.Second * 2
 
 type Job struct {
 	path     string
-	command  []string
+	command  *Command
 	interval time.Duration
 	timeout  *time.Duration
 	previous *Filelist
 }
 
-func NewJob(pathExpr string, command []string) *Job {
+func NewJob(pathExpr string, command *Command) *Job {
 	previous := make(Filelist, 0)
 	return &Job{
 		path:     pathExpr,
@@ -27,8 +27,8 @@ func NewJob(pathExpr string, command []string) *Job {
 	}
 }
 
-func NewLimitedJob(pathExpr string, commands []string, duration time.Duration) *Job {
-	job := NewJob(pathExpr, commands)
+func NewLimitedJob(pathExpr string, command *Command, duration time.Duration) *Job {
+	job := NewJob(pathExpr, command)
 	job.timeout = &duration
 	return job
 }
@@ -74,8 +74,7 @@ func (x *Job) execute() {
 		return
 	}
 
-	cmd := NewCommand(x.command[0], x.command[1:])
-	if err := cmd.ExecuteWith(&cmp); err != nil {
+	if err := x.command.ExecuteWith(&cmp); err != nil {
 		panic(err)
 	}
 }

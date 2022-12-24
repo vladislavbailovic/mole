@@ -7,7 +7,7 @@ import (
 
 func Test_NewLimitedJob(t *testing.T) {
 	dur := time.Second * 4
-	job := NewLimitedJob("testdata", []string{}, dur)
+	job := NewLimitedJob("testdata", &Command{}, dur)
 
 	if job.interval != defaultInterval {
 		t.Errorf("interval: want %v, got %v",
@@ -17,7 +17,7 @@ func Test_NewLimitedJob(t *testing.T) {
 }
 
 func Test_NewJob(t *testing.T) {
-	job := NewJob("testdata", []string{})
+	job := NewJob("testdata", &Command{})
 
 	if job.timeout != nil {
 		t.Errorf("duration: want nil, got %v",
