@@ -61,16 +61,17 @@ func Test_ParseFlags(t *testing.T) {
 func Test_JsonConfig(t *testing.T) {
 	target := internal.TargetAll
 	src := Config{
-		Paths:    []string{"./testdata/**/*"},
-		Cmd:      "ls -la",
-		Interval: time.Second * 2,
-		Target:   &target,
+		Paths:     []string{"./testdata/**/*"},
+		Cmd:       "ls -la",
+		Interval:  time.Second * 2,
+		RawTarget: "all",
+		Target:    &target,
 	}
 
-	pickle := PickleConfig(src)
+	pickle := PickleConfig([]Config{src})
 	loaded := UnpickleConfig(pickle)
 
-	compareConfigs(src, loaded, t)
+	compareConfigs(src, loaded[0], t)
 }
 
 func compareConfigs(want, got Config, t *testing.T) {

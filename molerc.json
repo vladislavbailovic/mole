@@ -1,0 +1,7 @@
+[
+	{
+		"paths": [ "./**/*.go" ],
+		"cmd": "go test ./...",
+		"target": "none"
+	}
+]
