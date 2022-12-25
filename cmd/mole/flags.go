@@ -12,11 +12,13 @@ import (
 var DefaultRcFilename = "molerc.json"
 
 type Config struct {
-	Paths    []string      `json:"paths"`
-	File     string        `json:"-"`
-	Maxdepth int           `json:"maxdepth"`
-	Cmd      string        `json:"cmd"`
-	Interval time.Duration `json:"interval"`
+	Paths    []string `json:"paths"`
+	File     string   `json:"-"`
+	Maxdepth int      `json:"maxdepth"`
+	Cmd      string   `json:"cmd"`
+
+	RawInterval string        `json:"interval"`
+	Interval    time.Duration `json:"-"`
 
 	RawTimeout time.Duration  `json:"timeout"`
 	Timeout    *time.Duration `json:"-"`
@@ -87,6 +89,14 @@ func hydrateConfig(cfg Config) Config {
 	if cfg.RawErrorHandling != "" {
 		cfg.ErrorHandling = internal.ErrorHandlingFromString(
 			cfg.RawErrorHandling)
+	}
+	if cfg.RawInterval != "" {
+		i, err := time.ParseDuration(cfg.RawInterval)
+		if err != nil {
+			cfg.Interval = internal.DefaultInterval
+		} else {
+			cfg.Interval = i
+		}
 	}
 	return cfg
 }

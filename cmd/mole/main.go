@@ -57,6 +57,7 @@ func cfg2JobList(cfg Config) []*internal.Job {
 		}
 
 		job.SetErrorHandling(cfg.ErrorHandling)
+		job.SetInterval(cfg.Interval)
 
 		jobs = append(jobs, job)
 	}

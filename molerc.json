@@ -1,8 +1,12 @@
 [
 	{
-		"paths": [ "./**/*.go" ],
+		"paths": [
+			"./internal/*.go",
+			"./cmd/mole/*.go"
+		],
 		"cmd": "go test ./...",
 		"target": "none",
+		"interval": "5s",
 		"error": "report"
 	}
 ]
