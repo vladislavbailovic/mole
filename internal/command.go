@@ -22,11 +22,11 @@ func TargetFromString(s string) CommandTarget {
 		return TargetAll
 	case "existing":
 		return TargetExisting
-	case "add":
+	case "add", "added":
 		return TargetAdded
-	case "chg":
+	case "chg", "changed":
 		return TargetChanged
-	case "rmv":
+	case "rmv", "removed":
 		return TargetRemoved
 	}
 	return TargetNone
@@ -78,6 +78,9 @@ func (x *Command) ExecuteWith(cmp *Comparison) error {
 			args = append(args, tgts...)
 		}
 	} else {
+		if x.target != TargetNone {
+			return nil
+		}
 		args = x.args[:]
 	}
 

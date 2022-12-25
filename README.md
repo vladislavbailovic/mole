@@ -35,6 +35,14 @@ $ go run mole/cmd/mole
 $ go test ./...
 ```
 
+For HTML coverage report:
+
+```console
+$ go test ./... -coverprofile=coverage.out
+$ go tool cover -html=coverage.out -o coverage.html
+$ xdg-open coverage.html
+```
+
 
 ## Usage
 

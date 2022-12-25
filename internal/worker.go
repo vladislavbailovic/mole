@@ -63,6 +63,9 @@ func NewLimitedJob(pathExpr string, command *Command, duration time.Duration) *J
 }
 
 func (x *Job) SetInterval(i time.Duration) {
+	if i <= 0 {
+		i = DefaultInterval
+	}
 	x.interval = i
 }
 

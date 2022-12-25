@@ -14,17 +14,22 @@ func Test_ListFiles(t *testing.T) {
 		{
 			path:  "**/*",
 			level: 0,
-			want:  []string{"nested"},
+			want:  []string{"molerc.json", "nested"},
 		},
 		{
 			path:  "**/*",
 			level: 1,
-			want:  []string{"nested", "nested/lvl1"},
+			want: []string{
+				"molerc.json",
+				"nested",
+				"nested/lvl1",
+			},
 		},
 		{
 			path:  "**/*",
 			level: 2,
 			want: []string{
+				"molerc.json",
 				"nested",
 				"nested/lvl1",
 				"nested/lvl1/f1.txt",
@@ -35,6 +40,7 @@ func Test_ListFiles(t *testing.T) {
 			path:  "**/*",
 			level: 3,
 			want: []string{
+				"molerc.json",
 				"nested",
 				"nested/lvl1",
 				"nested/lvl1/f1.txt",

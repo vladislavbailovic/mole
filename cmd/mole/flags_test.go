@@ -125,3 +125,24 @@ func compareConfigs(want, got Config, t *testing.T) {
 			want.Cmd, got.Cmd)
 	}
 }
+
+func Test_hydrateConfig_Defaults(t *testing.T) {
+	c := hydrateConfig(Config{RawErrorHandling: "report"})
+
+	if c.Interval != internal.DefaultInterval {
+		t.Errorf("want default interval, got: %v", c.Interval)
+	}
+	if c.ErrorHandling != internal.OnErrorReport {
+		t.Errorf("want report handling, got: %v",
+			c.ErrorHandling)
+	}
+}
+
+func Test_UnpickleRcFile(t *testing.T) {
+	cnt := internal.GetTestFile("molerc.json")
+	cfgs := UnpickleConfig(cnt)
+
+	if len(cfgs) != 1 {
+		t.Errorf("expected one config, got %d", len(cfgs))
+	}
+}
