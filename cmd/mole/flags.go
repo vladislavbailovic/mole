@@ -9,6 +9,8 @@ import (
 	"time"
 )
 
+var DefaultRcFilename = "molerc.json"
+
 type Config struct {
 	Paths    []string      `json:"paths"`
 	File     string        `json:"-"`
@@ -21,9 +23,10 @@ type Config struct {
 
 	RawTarget string                  `json:"target"`
 	Target    *internal.CommandTarget `json:"-"`
-}
 
-var DefaultRcFilename = "molerc.json"
+	RawErrorHandling string                 `json:"error"`
+	ErrorHandling    internal.ErrorHandling `json:"-"`
+}
 
 type arrayFlags []string
 
@@ -38,12 +41,13 @@ func (x *arrayFlags) Set(value string) error {
 
 func ParseFlags(args []string) Config {
 	var (
-		paths    arrayFlags
-		command  string
-		file     string
-		interval time.Duration
-		timeout  time.Duration
-		target   string
+		paths       arrayFlags
+		command     string
+		file        string
+		interval    time.Duration
+		timeout     time.Duration
+		target      string
+		errhandling string
 	)
 
 	cmd := flag.NewFlagSet("mole", flag.ExitOnError)
@@ -53,15 +57,17 @@ func ParseFlags(args []string) Config {
 	cmd.DurationVar(&timeout, "timeout", 0, "Until")
 	cmd.StringVar(&target, "target", "", "With these args")
 	cmd.StringVar(&file, "file", "", "Load config(s) from")
+	cmd.StringVar(&errhandling, "errhandling", "", "On error...")
 	cmd.Parse(args)
 
 	cfg := Config{
-		Paths:      paths,
-		Cmd:        strings.Trim(command, `'"`),
-		Interval:   interval,
-		File:       file,
-		RawTimeout: timeout,
-		RawTarget:  target,
+		Paths:            paths,
+		Cmd:              strings.Trim(command, `'"`),
+		Interval:         interval,
+		File:             file,
+		RawTimeout:       timeout,
+		RawTarget:        target,
+		RawErrorHandling: errhandling,
 	}
 
 	return hydrateConfig(cfg)
@@ -77,6 +83,10 @@ func hydrateConfig(cfg Config) Config {
 	if cfg.RawTarget != "" {
 		tgt := internal.TargetFromString(cfg.RawTarget)
 		cfg.Target = &tgt
+	}
+	if cfg.RawErrorHandling != "" {
+		cfg.ErrorHandling = internal.ErrorHandlingFromString(
+			cfg.RawErrorHandling)
 	}
 	return cfg
 }

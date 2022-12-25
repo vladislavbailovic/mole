@@ -2,6 +2,7 @@
 	{
 		"paths": [ "./**/*.go" ],
 		"cmd": "go test ./...",
-		"target": "none"
+		"target": "none",
+		"error": "report"
 	}
 ]

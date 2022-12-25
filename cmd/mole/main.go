@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"mole/internal"
 	"os"
 	"strings"
@@ -37,7 +36,6 @@ func main() {
 	}
 
 	wg.Wait()
-	fmt.Println("-- all done --")
 }
 
 func cfg2JobList(cfg Config) []*internal.Job {
@@ -57,6 +55,9 @@ func cfg2JobList(cfg Config) []*internal.Job {
 			job = internal.NewJob(
 				path, command)
 		}
+
+		job.SetErrorHandling(cfg.ErrorHandling)
+
 		jobs = append(jobs, job)
 	}
 	return jobs

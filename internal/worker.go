@@ -2,16 +2,46 @@ package internal
 
 import (
 	"context"
+	"fmt"
 	"time"
 )
 
 var DefaultInterval time.Duration = time.Second * 2
+
+type ErrorHandling int
+
+const (
+	OnErrorBreak ErrorHandling = iota
+	OnErrorReport
+	OnErrorSilent
+)
+
+func ErrorHandlingFromString(s string) ErrorHandling {
+	switch s {
+	case "report":
+		return OnErrorReport
+	case "silent":
+		return OnErrorSilent
+	}
+	return OnErrorBreak
+}
+
+func (x ErrorHandling) String() string {
+	switch x {
+	case OnErrorReport:
+		return "report"
+	case OnErrorSilent:
+		return "silent"
+	}
+	return "break"
+}
 
 type Job struct {
 	path     string
 	command  *Command
 	interval time.Duration
 	timeout  *time.Duration
+	onError  ErrorHandling
 	previous *Filelist
 }
 
@@ -34,6 +64,10 @@ func NewLimitedJob(pathExpr string, command *Command, duration time.Duration) *J
 
 func (x *Job) SetInterval(i time.Duration) {
 	x.interval = i
+}
+
+func (x *Job) SetErrorHandling(e ErrorHandling) {
+	x.onError = e
 }
 
 func (x *Job) Watch(ctx context.Context) {
@@ -73,6 +107,13 @@ func (x *Job) execute() {
 	}
 
 	if err := x.command.ExecuteWith(&cmp); err != nil {
+		switch x.onError {
+		case OnErrorSilent:
+			return
+		case OnErrorReport:
+			fmt.Println(err)
+			return
+		}
 		panic(err)
 	}
 }
