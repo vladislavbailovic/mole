@@ -9,6 +9,7 @@ File watcher and task runner
 	- [Building](#markdown-header-building)
 	- [Running](#markdown-header-running)
 	- [Testing](#markdown-header-testing)
+- [Usage](#markdown-header-usage)
 
 
 ## Quick Start
