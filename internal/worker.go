@@ -38,6 +38,7 @@ func (x ErrorHandling) String() string {
 
 type Job struct {
 	path     string
+	depth    int
 	command  *Command
 	interval time.Duration
 	timeout  *time.Duration
@@ -49,6 +50,7 @@ func NewJob(pathExpr string, command *Command) *Job {
 	previous := make(Filelist, 0)
 	return &Job{
 		path:     pathExpr,
+		depth:    DefaultGlobDepth,
 		command:  command,
 		interval: DefaultInterval,
 		timeout:  nil,
@@ -71,6 +73,10 @@ func (x *Job) SetInterval(i time.Duration) {
 
 func (x *Job) SetErrorHandling(e ErrorHandling) {
 	x.onError = e
+}
+
+func (x *Job) SetMaxdepth(d int) {
+	x.depth = d
 }
 
 func (x *Job) Watch(ctx context.Context) {
@@ -99,7 +105,7 @@ work:
 }
 
 func (x *Job) execute() {
-	paths := ListFiles(x.path, DefaultGlobDepth)
+	paths := ListFiles(x.path, x.depth)
 
 	lst := NewFilelist(paths)
 	cmp := CompareFilelists(&lst, x.previous)

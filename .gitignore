@@ -1,3 +1,4 @@
 /mole
 coverage.out
 coverage.html
+*.prof

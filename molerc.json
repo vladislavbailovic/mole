@@ -1,12 +1,12 @@
 [
 	{
 		"paths": [
-			"./internal/*.go",
-			"./cmd/mole/*.go"
+			"./**/*.go"
 		],
+		"maxdepth": 2,
 		"cmd": "go test ./...",
 		"target": "none",
-		"interval": "5s",
+		"interval": "2s",
 		"error": "report"
 	}
 ]

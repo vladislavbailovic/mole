@@ -58,6 +58,9 @@ func cfg2JobList(cfg Config) []*internal.Job {
 
 		job.SetErrorHandling(cfg.ErrorHandling)
 		job.SetInterval(cfg.Interval)
+		if cfg.Maxdepth != 0 {
+			job.SetMaxdepth(cfg.Maxdepth)
+		}
 
 		jobs = append(jobs, job)
 	}

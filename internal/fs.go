@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-var DefaultGlobDepth int = 5
+var DefaultGlobDepth int = 2
 var doubleStarMaxGlobDepth int = 5
 
 func ListFiles(expr string, globDepth int) []string {
