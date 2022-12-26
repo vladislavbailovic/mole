@@ -58,17 +58,17 @@ func NewJob(pathExpr string, command *Command) *Job {
 	}
 }
 
-func NewLimitedJob(pathExpr string, command *Command, duration time.Duration) *Job {
-	job := NewJob(pathExpr, command)
-	job.timeout = &duration
-	return job
-}
-
 func (x *Job) SetInterval(i time.Duration) {
 	if i <= 0 {
 		i = DefaultInterval
 	}
 	x.interval = i
+}
+
+func (x *Job) SetTimeout(t time.Duration) {
+	if t > 0 {
+		x.timeout = &t
+	}
 }
 
 func (x *Job) SetErrorHandling(e ErrorHandling) {

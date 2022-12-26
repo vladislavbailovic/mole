@@ -20,7 +20,7 @@ type Config struct {
 	RawInterval string        `json:"interval"`
 	Interval    time.Duration `json:"-"`
 
-	RawTimeout time.Duration  `json:"timeout"`
+	RawTimeout string         `json:"timeout"`
 	Timeout    *time.Duration `json:"-"`
 
 	RawTarget string                  `json:"target"`
@@ -67,17 +67,22 @@ func ParseFlags(args []string) Config {
 		Cmd:              strings.Trim(command, `'"`),
 		Interval:         interval,
 		File:             file,
-		RawTimeout:       timeout,
 		RawTarget:        target,
 		RawErrorHandling: errhandling,
+	}
+	if timeout > 0 {
+		cfg.Timeout = &timeout
 	}
 
 	return hydrateConfig(cfg)
 }
 
 func hydrateConfig(cfg Config) Config {
-	if cfg.RawTimeout > 0 {
-		cfg.Timeout = &cfg.RawTimeout
+	if cfg.RawTimeout != "" {
+		t, err := time.ParseDuration(cfg.RawTimeout)
+		if err == nil {
+			cfg.Timeout = &t
+		}
 	}
 	if cfg.Interval == 0 {
 		cfg.Interval = internal.DefaultInterval

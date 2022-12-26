@@ -47,15 +47,12 @@ func cfg2JobList(cfg Config) []*internal.Job {
 			command.SetTarget(*cfg.Target)
 		}
 
-		var job *internal.Job
-		if cfg.Timeout != nil {
-			job = internal.NewLimitedJob(
-				path, command, *cfg.Timeout)
-		} else {
-			job = internal.NewJob(
-				path, command)
-		}
+		job := internal.NewJob(
+			path, command)
 
+		if cfg.Timeout != nil {
+			job.SetTimeout(*cfg.Timeout)
+		}
 		job.SetErrorHandling(cfg.ErrorHandling)
 		job.SetInterval(cfg.Interval)
 		if cfg.Maxdepth != 0 {
