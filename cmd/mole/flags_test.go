@@ -20,6 +20,7 @@ func Test_ParseFlags(t *testing.T) {
 			want: Config{
 				Paths:    []string{"./testdata/**/*"},
 				Cmd:      "ls -la",
+				Maxdepth: internal.DefaultGlobDepth,
 				Interval: internal.DefaultInterval,
 			},
 		},
@@ -32,6 +33,7 @@ func Test_ParseFlags(t *testing.T) {
 			want: Config{
 				Paths:    []string{"./testdata/**/*"},
 				Cmd:      "ls -la",
+				Maxdepth: internal.DefaultGlobDepth,
 				Interval: 5 * time.Second,
 			},
 		},
@@ -41,10 +43,12 @@ func Test_ParseFlags(t *testing.T) {
 				"--path", "'./testdata/**/*'",
 				"--interval", "5s",
 				"--timeout", "11s",
+				"--maxdepth", "1",
 			},
 			want: Config{
 				Paths:    []string{"./testdata/**/*"},
 				Cmd:      "ls -la",
+				Maxdepth: 1,
 				Interval: 5 * time.Second,
 				Timeout:  &es,
 			},
@@ -64,6 +68,7 @@ func Test_JsonConfig(t *testing.T) {
 		Paths:     []string{"./testdata/**/*"},
 		Cmd:       "ls -la",
 		Interval:  time.Second * 2,
+		Maxdepth:  internal.DefaultGlobDepth,
 		RawTarget: "all",
 		Target:    &target,
 	}

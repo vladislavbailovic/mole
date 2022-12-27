@@ -44,6 +44,7 @@ func (x *arrayFlags) Set(value string) error {
 func ParseFlags(args []string) Config {
 	var (
 		paths       arrayFlags
+		maxdepth    int
 		command     string
 		file        string
 		interval    time.Duration
@@ -55,6 +56,7 @@ func ParseFlags(args []string) Config {
 	cmd := flag.NewFlagSet("mole", flag.ExitOnError)
 	cmd.Var(&paths, "path", "Watch these files")
 	cmd.StringVar(&command, "command", "", "Run this command")
+	cmd.IntVar(&maxdepth, "maxdepth", internal.DefaultGlobDepth, "Glob expansion depth")
 	cmd.DurationVar(&interval, "interval", internal.DefaultInterval, "Every so often")
 	cmd.DurationVar(&timeout, "timeout", 0, "Until")
 	cmd.StringVar(&target, "target", "", "With these args")
@@ -64,6 +66,7 @@ func ParseFlags(args []string) Config {
 
 	cfg := Config{
 		Paths:            paths,
+		Maxdepth:         maxdepth,
 		Cmd:              strings.Trim(command, `'"`),
 		Interval:         interval,
 		File:             file,
@@ -102,6 +105,9 @@ func hydrateConfig(cfg Config) Config {
 		} else {
 			cfg.Interval = i
 		}
+	}
+	if cfg.Maxdepth == 0 {
+		cfg.Maxdepth = internal.DefaultGlobDepth
 	}
 	return cfg
 }
