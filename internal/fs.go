@@ -5,16 +5,11 @@ import (
 	"strings"
 )
 
-var DefaultGlobDepth int = 2
 var doubleStarMaxGlobDepth int = 5
 
-func ListFiles(expr string, globDepth int) []string {
-	if !strings.Contains(expr, "**") {
-		return listFiles(expr)
-	}
-
+func ListFiles(lst *Pathlist) []string {
 	tmp := map[string]struct{}{}
-	for _, path := range createPathList(expr, globDepth) {
+	for _, path := range *lst {
 		for _, f := range listFiles(path) {
 			tmp[f] = struct{}{}
 		}

@@ -62,7 +62,8 @@ func Test_ListFiles(t *testing.T) {
 	for _, test := range suite {
 		name := fmt.Sprintf("level %d", test.level)
 		t.Run(name, func(t *testing.T) {
-			got := ListFiles(root+"/"+test.path, test.level)
+			p := NewPathlist([]string{root + "/" + test.path}, test.level)
+			got := ListFiles(p)
 			if len(got) != len(test.want) {
 				t.Log("want", test.want)
 				t.Log("got", got)

@@ -23,9 +23,10 @@ func Test_NewHash_Error(t *testing.T) {
 }
 
 func Test_NewFilelist(t *testing.T) {
-	src := ListFiles(
-		GetTestFilePath("/**/*.txt"),
+	p := NewPathlist(
+		[]string{GetTestFilePath("/**/*.txt")},
 		DefaultGlobDepth)
+	src := ListFiles(p)
 	lst := NewFilelist(src)
 	if len(src) != len(lst) {
 		t.Log(lst)

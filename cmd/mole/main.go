@@ -39,29 +39,22 @@ func main() {
 }
 
 func cfg2JobList(cfg Config) []*internal.Job {
-	jobs := make([]*internal.Job, 0, len(cfg.Paths))
-	for _, path := range cfg.Paths {
-		cmd := strings.Split(cfg.Cmd, " ")
-		command := internal.NewCommand(cmd[0], cmd[1:])
-		if cfg.Target != nil {
-			command.SetTarget(*cfg.Target)
-		}
-
-		job := internal.NewJob(
-			path, command)
-
-		if cfg.Timeout != nil {
-			job.SetTimeout(*cfg.Timeout)
-		}
-		job.SetErrorHandling(cfg.ErrorHandling)
-		job.SetInterval(cfg.Interval)
-		if cfg.Maxdepth != 0 {
-			job.SetMaxdepth(cfg.Maxdepth)
-		}
-
-		jobs = append(jobs, job)
+	cmd := strings.Split(cfg.Cmd, " ")
+	command := internal.NewCommand(cmd[0], cmd[1:])
+	if cfg.Target != nil {
+		command.SetTarget(*cfg.Target)
 	}
-	return jobs
+
+	job := internal.NewJob(command)
+
+	if cfg.Timeout != nil {
+		job.SetTimeout(*cfg.Timeout)
+	}
+	job.SetErrorHandling(cfg.ErrorHandling)
+	job.SetInterval(cfg.Interval)
+	job.SetPaths(cfg.Paths, cfg.Maxdepth)
+
+	return []*internal.Job{job}
 }
 
 func rcfile2JobList(file string) []*internal.Job {

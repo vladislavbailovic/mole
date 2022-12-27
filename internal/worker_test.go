@@ -40,7 +40,7 @@ func Test_ErrorHandling_ToString(t *testing.T) {
 }
 
 func Test_NewJob(t *testing.T) {
-	job := NewJob("testdata", &Command{})
+	job := NewJob(&Command{})
 
 	if job.timeout != nil {
 		t.Errorf("duration: want nil, got %v",
@@ -54,7 +54,7 @@ func Test_NewJob(t *testing.T) {
 }
 
 func Test_SetErrorHandling(t *testing.T) {
-	job := NewJob("testdata", &Command{})
+	job := NewJob(&Command{})
 	suite := map[string]ErrorHandling{
 		"break":  OnErrorBreak,
 		"report": OnErrorReport,
@@ -72,7 +72,7 @@ func Test_SetErrorHandling(t *testing.T) {
 }
 
 func Test_SetInterval(t *testing.T) {
-	job := NewJob("testdata", &Command{})
+	job := NewJob(&Command{})
 	suite := map[string]struct {
 		test time.Duration
 		want time.Duration
